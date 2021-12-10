@@ -43,8 +43,31 @@ node index.js
 ```
 #### Facil, verdad ? Que comience la batalla
 
+## Docker
+
+para ejecutar el programa con docker hacemos en la terminal
+
+```sh
+docker pull krisyupher/poke-battle
+```
+para correr contenedor apartir de la imagen usa:
+```sh
+docker run -d -p 3000:3000 krisyupher/poke-battle
+```
+
+##### y listo ya podemos hacer peticiones
+
+para ver la lista de container usa:
+```sh
+docker ps
+```
+para detener el proceso usa:
+```sh
+docker stop <Container ID>
+```
+
 ## Creditos 
 
 Dev:  @krisyupher ó Cristian Camilo  Florez Ramos
 
-Prueba tecnica para el puesto de desarrollador back en Senti
+Prueba tecnica para el puesto de desarrollador back en Seti

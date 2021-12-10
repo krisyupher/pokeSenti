@@ -28,10 +28,6 @@ router.post("/", async (req, res) => {
       ok: false,
       er: error.response.data,
     });
-    res.status(404).json({
-      ok: false,
-      er: "algo",
-    });
   }
 });
 

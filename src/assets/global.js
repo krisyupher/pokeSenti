@@ -23,42 +23,30 @@ const pokeDataByType = (pokeTypeUrl) => {
  * @param {Object} pokeTwoData  los Json que devuelve la funcion pokeDataByName()
  * @returns objeto final de con la informacion del ganador y estadistica de los oponentes
  */
-const pokeBattleDamage = async (pokeOneData, pokeTwoData) => {
-  const urlPokeOneData = pokeOneData.types.map((item) => item.type.url);
-  const urlPokeTwoData = pokeTwoData.types.map((item) => item.type.url);
-  let pokeOneDataByType = {}
-  let pokeTwoDataByType = {}
-  let pokeDataStatisticsOne = {};
-  let pokeDataStatisticsTwo = {};
-  try {
-    pokeOneDataByType = await Promise.all(
-      urlPokeOneData.map((item) => pokeDataByType(item))
-    );
-    pokeTwoDataByType = await Promise.all(
-      urlPokeTwoData.map((item) => pokeDataByType(item))
-    );
-    pokeDataStatisticsOne = damageRelations(
-      pokeOneData,
-      pokeTwoData,
-      pokeTwoDataByType
-    );
-    pokeDataStatisticsTwo = damageRelations(
-      pokeTwoData,
-      pokeOneData,
-      pokeOneDataByType
-    );
-  } catch (error) {
-    console.log("Error", error.response.status);
-    res.status(error.response.status).json({
-      ok: false,
-      er: error.response.data,
-    });
-  }
+ const pokeBattleDamage = async (pokeOneData, pokeTwoData) => {
+  const urlPokeOneData = pokeOneData.types.map((item) => pokeDataByType(item.type.url));
+  const urlPokeTwoData = pokeTwoData.types.map((item) => pokeDataByType(item.type.url));
+
+  const [pokeOneDataByType, pokeTwoDataByType] = await Promise.all([
+    Promise.all(urlPokeOneData),
+    Promise.all(urlPokeTwoData),
+  ]);
+
+  const pokeDataStatisticsOne = damageRelations(
+    pokeOneData,
+    pokeTwoData,
+    pokeTwoDataByType
+  );
+  const pokeDataStatisticsTwo = damageRelations(
+    pokeTwoData,
+    pokeOneData,
+    pokeOneDataByType
+  );
+
   return {
     winner: winnerOrLoser(pokeDataStatisticsOne, pokeDataStatisticsTwo),
     fighterStatistic: pokeDataStatisticsOne,
     opponentStatistic: pokeDataStatisticsTwo,
-    etc: "",
   };
 };
 
